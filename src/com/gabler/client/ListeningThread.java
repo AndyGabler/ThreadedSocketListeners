@@ -39,7 +39,7 @@ public class ListeningThread extends Thread {
 			
 			if (listener.hasNextLine()) {
 				message = listener.nextLine();
-				LOGGER.info("Found message from server");
+				LOGGER.info("Found message from server.");
 			}
 			
 			if (message == null) {
@@ -61,7 +61,7 @@ public class ListeningThread extends Thread {
 	 */
 	public synchronized void terminate() {
 		
-		if (client.getConfiguration() != null && client.getConfiguration().canTerminate()) {
+		if (client.getConfiguration() != null && !client.getConfiguration().canTerminate()) {
 			LOGGER.info("Terminate request rejected.");
 			return;
 		}
