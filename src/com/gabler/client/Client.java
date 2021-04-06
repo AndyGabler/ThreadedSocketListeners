@@ -1,8 +1,10 @@
 package com.gabler.client;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 
 import com.gabler.shared.net.NetMessenger;
@@ -16,6 +18,7 @@ public class Client extends NetMessenger<ClientConfiguration> {
 
 	private static final Logger LOGGER = Logger.getLogger("Client");
 
+	private final BiFunction<String, Integer, Socket> socketFactory;
 	private String hostName = "";
 	private int portNumber = -1;
 
@@ -29,6 +32,23 @@ public class Client extends NetMessenger<ClientConfiguration> {
 	 * @param port The port
 	 */
 	public Client(String hostname, int port) {
+		this((host, portNumber) -> {
+			try {
+				return new Socket(host, portNumber);
+			} catch (IOException exception) {
+				throw new RuntimeException(exception);
+			}
+		}, hostname, port);
+	}
+
+	/**
+	 * Client talking to server with configurable back-and-forth
+	 * @param aSocketFactory Socket factory
+	 * @param hostname The hostname
+	 * @param port The port
+	 */
+	public Client(BiFunction<String, Integer, Socket> aSocketFactory, String hostname, int port) {
+		socketFactory = aSocketFactory;
 		hostName = hostname;
 		portNumber = port;
 	}
@@ -45,7 +65,7 @@ public class Client extends NetMessenger<ClientConfiguration> {
 			
 			indicateStart();
 			
-			final Socket connection = new Socket(hostName, portNumber);
+			final Socket connection = socketFactory.apply(hostName, portNumber);
 			
 			final Scanner inbound = new Scanner(connection.getInputStream());
 			outbound = new PrintStream(connection.getOutputStream());

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import com.gabler.shared.net.NetMessenger;
@@ -17,6 +19,7 @@ public class Server extends NetMessenger<ServerConfiguration> {
 
 	private static final Logger LOGGER = Logger.getLogger("Server");
 
+	private final Function<Integer, ServerSocket> socketFactory;
 	private int portNumber = -1;
 	private ServerSocket serverSocket = null;
 	private ServerThread thread = null;
@@ -26,17 +29,32 @@ public class Server extends NetMessenger<ServerConfiguration> {
 	 * @param port The port number
 	 */
 	public Server(int port) {
+		this(serverPort -> {
+			try {
+				return new ServerSocket(serverPort);
+			} catch (IOException exception) {
+				throw new RuntimeException(exception);
+			}
+		}, port);
+	}
+
+	/**
+	 * Multi-Client Server that is configurable to send custom messages and responses
+	 * @param aSocketFactory Method to create the underlying socket
+	 * @param port The port number
+	 */
+	public Server(Function<Integer, ServerSocket> aSocketFactory, int port) {
 		LOGGER.info("Binding server to: " + port);
 		portNumber = port;
+		socketFactory = aSocketFactory;
 	}
 	
 	private volatile ArrayList<ChatThread> connections = new ArrayList<ChatThread>();
 	
 	/**
 	 * Start the server
-	 * @throws IOException If the port is being used
 	 */
-	public void start() throws IOException {
+	public void start() {
 		
 		LOGGER.info("Server thread started");
 		
@@ -46,7 +64,7 @@ public class Server extends NetMessenger<ServerConfiguration> {
 		
 		indicateStart();
 		
-		serverSocket = new ServerSocket(portNumber);
+		serverSocket = socketFactory.apply(portNumber);
 		thread = new ServerThread(serverSocket);
 		
 		LOGGER.info("Sending request to start server thread");

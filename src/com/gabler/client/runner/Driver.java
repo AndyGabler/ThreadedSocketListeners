@@ -4,7 +4,6 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import com.gabler.client.Client;
-import com.gabler.client.ClientStartException;
 
 /**
  * Run an implementation of the client
@@ -116,7 +115,7 @@ public class Driver {
 		try {
 			client = new Client(host, port);
 			client.startConnection();
-		} catch (ClientStartException error) {
+		} catch (Exception error) {
 			System.out.println("Issue starting client connection: \n" + error);
 		}
 

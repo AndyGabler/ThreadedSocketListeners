@@ -33,3 +33,4 @@ test {
 
 mainClassName = 'com.gabler.client.runner.Driver'
 applicationName = 'Gabler Messaging Tool'
+version '1.1.0'

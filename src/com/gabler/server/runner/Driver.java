@@ -1,6 +1,5 @@
 package com.gabler.server.runner;
 
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -75,7 +74,7 @@ public class Driver {
 	private static void makeServer(int port) {
 		try {
 			new Server(port).start();
-		} catch (IOException error) {
+		} catch (Exception error) {
 			System.out.println("Error in starting server connection");;
 		}
 	}
