@@ -1,6 +1,6 @@
 package com.gabler.shared.net;
 
-import java.io.PrintStream;
+import java.io.PrintWriter;
 
 import com.gabler.server.ChatThread;
 
@@ -33,9 +33,9 @@ public abstract class NetConfiguration {
 
 	/**
 	 * Action for when a {@code Client} joins
-	 * @param messenger The {@code PrintStream} to the receiving {@code Socket}
+	 * @param messenger The {@code PrintWriter} to the receiving {@code Socket}
 	 */
-	public abstract void joinAction(PrintStream messenger);
+	public abstract void joinAction(PrintWriter messenger);
 	
 	/**
 	 * Validation as to whether or not {@code NetMessenger} operations can run

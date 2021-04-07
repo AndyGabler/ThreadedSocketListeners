@@ -1,7 +1,7 @@
 package com.gabler.server;
 
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -19,7 +19,7 @@ public class ChatThread extends Thread {
 	private volatile Socket client = null;
 	
 	private volatile Scanner inbound = null;
-	private volatile PrintStream outbound = null;
+	private volatile PrintWriter outbound = null;
 	
 	private volatile boolean isRunning = true;
 	
@@ -43,7 +43,7 @@ public class ChatThread extends Thread {
 		
 		try {
 			inbound = new Scanner(client.getInputStream());
-			outbound = new PrintStream(client.getOutputStream());
+			outbound = new PrintWriter(client.getOutputStream());
 		} catch (IOException error) {
 			error.printStackTrace();
 		}
@@ -109,10 +109,10 @@ public class ChatThread extends Thread {
 	}
 	
 	/**
-	 * Get the {@code PrintStream} to talk to client
-	 * @return The {@code PrintStream}
+	 * Get the {@code PrintWriter} to talk to client
+	 * @return The {@code PrintWriter}
 	 */
-	synchronized PrintStream getPrinter() {
+	synchronized PrintWriter getPrinter() {
 		return outbound;
 	}
 	

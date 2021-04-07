@@ -1,7 +1,7 @@
 package com.gabler.client;
 
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.function.BiFunction;
@@ -19,10 +19,10 @@ public class Client extends NetMessenger<ClientConfiguration> {
 	private static final Logger LOGGER = Logger.getLogger("Client");
 
 	private final BiFunction<String, Integer, Socket> socketFactory;
-	private String hostName = "";
-	private int portNumber = -1;
+	private String hostName;
+	private int portNumber;
 
-	private volatile PrintStream outbound = null;
+	private volatile PrintWriter outbound = null;
 	
 	private volatile ListeningThread listeningThread = null;
 	
@@ -68,7 +68,7 @@ public class Client extends NetMessenger<ClientConfiguration> {
 			final Socket connection = socketFactory.apply(hostName, portNumber);
 			
 			final Scanner inbound = new Scanner(connection.getInputStream());
-			outbound = new PrintStream(connection.getOutputStream());
+			outbound = new PrintWriter(connection.getOutputStream());
 			
 			LOGGER.info("Starting message listening thread");
 			
