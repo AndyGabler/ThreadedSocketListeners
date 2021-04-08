@@ -79,7 +79,7 @@ public class Client extends NetMessenger<ClientConfiguration> {
 			}
 			
 		} catch (Exception error) {
-			throw ClientStartException.make("\nNested exception: " + error.getMessage());
+			throw new ClientStartException(error);
 		}
 		
 		listeningThread.start();
@@ -120,6 +120,7 @@ public class Client extends NetMessenger<ClientConfiguration> {
 		}
 		
 		outbound.println(message);
+		outbound.flush();
 	}
 
 	/**
@@ -133,7 +134,5 @@ public class Client extends NetMessenger<ClientConfiguration> {
 		}
 		
 		listeningThread.terminate();
-		
 	}
-	
 }

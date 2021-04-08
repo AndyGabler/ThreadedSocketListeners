@@ -16,22 +16,30 @@ public class ClientStartException extends Exception {
 	 * Message at beginning of exception
 	 */
 	private static final String EXCEPTION_MESSAGE_START = "Error in Starting Client";
-	
+
 	/**
 	 * Error while starting {@code Client}
 	 */
 	public ClientStartException() {
-		super(EXCEPTION_MESSAGE_START);
+		this(EXCEPTION_MESSAGE_START);
 	}
-	
+
 	/**
 	 * Error while starting {@code Client}
 	 * @param message Message
 	 */
 	private ClientStartException(String message) {
-		super(EXCEPTION_MESSAGE_START + ": " + message);
+		super(message);
 	}
-	
+
+	/**
+	 * Error while starting {@code Client}
+	 * @param exception Nested exception
+	 */
+	public ClientStartException(Exception exception) {
+		super(EXCEPTION_MESSAGE_START, exception);
+	}
+
 	/**
 	 * Error while starting {@code Client}
 	 * @return Error while starting {@code Client}
@@ -39,18 +47,4 @@ public class ClientStartException extends Exception {
 	public static ClientStartException make() {
 		return new ClientStartException();
 	}
-	
-	/**
-	 * Error while starting {@code Client}
-	 * @param message The message
-	 * @return Error while starting {@code Client}
-	 */
-	public static ClientStartException make(String message) {
-		if (message == null || message.isEmpty()) {
-			return make();
-		}
-		
-		return new ClientStartException(message);
-	}
-	
 }

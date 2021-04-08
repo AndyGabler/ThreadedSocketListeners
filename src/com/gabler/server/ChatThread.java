@@ -96,6 +96,7 @@ public class ChatThread extends Thread {
 		
 		if (origin != this || returnToSender) {
 			outbound.println(message);
+			outbound.flush();
 		}
 		
 	}
