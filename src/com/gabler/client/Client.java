@@ -132,7 +132,8 @@ public class Client extends NetMessenger<ClientConfiguration> {
 		if (!checkActionAllowed("terminate")) {
 			return;
 		}
-		
+
+		outbound.close();
 		listeningThread.terminate();
 	}
 }

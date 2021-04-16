@@ -106,6 +106,8 @@ public class ChatThread extends Thread {
 	 */
 	public synchronized void terminate() {
 		isRunning = false;
+		outbound.close();
+		inbound.close();
 		server.removeConnection(this);
 	}
 	
